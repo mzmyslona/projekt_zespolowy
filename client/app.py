@@ -1,20 +1,41 @@
-import time
 import sys
+import time
 from frontend import Frontend
-
+from user import User
 
 class ChatApp:
     def __init__(self):
         self.frontend = Frontend()
+        # Predefined list of users for demonstration
+        self.users = [
+            User("john_doe", "password123", "john.doe@example.com"),
+            User("jane_smith", "12345", "jane.smith@example.com")
+        ]
+        self.logged_in_user = None
+
+    def login(self):
+        """Handles user login."""
+        self.frontend.type_effect(self.frontend.print_colored("\nLogin Panel\n", 'cyan'))
+        username = input("Enter username: ")
+        password = input("Enter password: ")
+
+        # Authenticate user
+        for user in self.users:
+            if user.username == username and user.password == password:
+                self.logged_in_user = user
+                self.frontend.type_effect(
+                    self.frontend.print_colored(f"\nWelcome, {user.username}!\n", 'green')
+                )
+                return
+
+        self.frontend.type_effect(self.frontend.print_colored("\nInvalid username or password.\n", 'red'))
 
     def handle_user_choice(self, choice):
         """Handles user input for menu choices."""
         if choice == "1":
-            self.frontend.type_effect(self.frontend.print_colored("\nYou selected Log in.\n", 'yellow'))
-            # Add login functionality here
+            self.login()
         elif choice == "2":
-            self.frontend.type_effect(self.frontend.print_colored("\nYou selected Sign in.\n", 'yellow'))
-            # Add sign-in functionality here
+            self.frontend.type_effect(self.frontend.print_colored("\nSign in functionality is under construction.\n", 'yellow'))
         elif choice == "3":
             self.frontend.type_effect(self.frontend.print_colored("\nExiting... Goodbye!\n", 'red'))
             sys.exit(0)
@@ -35,3 +56,4 @@ class ChatApp:
 if __name__ == "__main__":
     app = ChatApp()
     app.run()
+
