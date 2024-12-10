@@ -25,7 +25,7 @@ setup()
             deactivate
         fi
         rm -rf "$venv_dir"
-        virtualenv -p /usr/bin/python3.12 "$venv_dir"
+        virtualenv -p /usr/bin/python3 "$venv_dir"
         source "$venv_dir/bin/activate"
         python3 -m pip install -r "$requirements"
     fi
