@@ -2,12 +2,13 @@ import sys
 import time
 import re  # Import regular expression library
 from frontend import Frontend
+from server_connection import ServerConnection
 from user import User
 
 class ChatApp:
     def __init__(self):
         self.frontend = Frontend()
-        self.logged_in_user = None
+        self.server_connection = ServerConnection()
 
     def login(self):
         """Handles user login."""
@@ -16,15 +17,7 @@ class ChatApp:
         password = input("Enter password: ")
 
         user_to_auth = User(username, password)
-
-        # Authenticate user
-        for user in self.users:
-            if user.username == username and user.password == password:
-                self.logged_in_user = user
-                self.frontend.type_effect(
-                    self.frontend.print_colored(f"\nWelcome, {user.username}!\n", 'green')
-                )
-                return
+        self.server_connection.log_in(user_to_auth)
 
         self.frontend.type_effect(self.frontend.print_colored("\nInvalid username or password.\n", 'red'))
 

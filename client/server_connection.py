@@ -1,24 +1,17 @@
-from requests import RequestCreator  # Import the RequestCreator class
+from server_requests import RequestCreator  # Import the RequestCreator class
 from user import User, UserIdentity
 
 class ServerConnection:
-    def __init__(self, url, port):
+    def __init__(self):
         """Constructor for ServerConnection."""
-        self.url = url
-        self.port = port
+        self.url = "ToDelete"
         self.request_creator = None  # Initially empty, will be set after login
 
     def log_in(self, user):
-        """Log in the user and set the request_creator instance."""
-        # Simulate getting the session_id from an external source (e.g., server response, random generation, etc.)
-        session_id = self.get_session_id(user)
-
-        # Create UserIdentity instance with the user and session_id
-        user_identity = UserIdentity(user, session_id)
-
-        # Now assign RequestCreator instance with user_identity
-        self.request_creator = RequestCreator(user_identity)  # Instantiate RequestCreator with user_identity
-        print(f"Logged in as {user_identity.user.username}")
+        """Log in the user and set its identity"""
+        self.request_creator = RequestCreator()
+        response = self.request_creator.send_log_in_request(user)
+        print(response)
 
     def get_session_id(self, user):
         """Simulates acquiring session ID for the user (this can be replaced with actual logic)."""
