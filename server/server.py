@@ -10,6 +10,10 @@ server = Server()
 def login():
     return server.login(request)
 
+@app.route('/signup', methods = ['POST'])
+def signup():
+    return server.signup(request)
+
 @app.route('/')
 def home():
     return server.home()
