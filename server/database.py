@@ -95,11 +95,10 @@ class Database:
                 return False, "No channels found for this user."
 
         except Exception as e:
-            # Log or handle the error as needed
             return False, f"Error occurred while listing channels: {str(e)}"
         
         finally:
-            session.close()  # Always close the session
+            session.close()
         
     def create_channel(self, channel_owner, channel_name, users):
         """Creates a new channel with the given owner and users."""
@@ -141,9 +140,8 @@ class Database:
             session.rollback()  # Roll back the session in case of error
             return False, f"Error occurred during channel creation: {str(e)}"
         finally:
-            session.close()  # Always close the session
+            session.close()
 
-    # operacja autoryzowana - zawolac to moze tylko wlasciciel
     def remove_channel(self, channel_owner, channel_name):
         """Remove a channel only if the specified user is the owner."""
         Session = sessionmaker(bind=self.db_connection())
@@ -173,9 +171,8 @@ class Database:
             session.rollback()  # Roll back in case of error
             return False, f"Error occurred during channel removal: {str(e)}"
         finally:
-            session.close()  # Always close the session
+            session.close()
 
-    # operacja autoryzowana - tylko wlasciciel kanalu bedzie mogl dodac uzytkownikow
     def add_channel_member(self, channel_owner, channel_name, username):
         """Add a member to the specified channel if the channel owner is valid."""
         Session = sessionmaker(bind=self.db_connection())
@@ -222,7 +219,7 @@ class Database:
             session.rollback()
             return False, f"Error occurred during adding user to channel: {str(e)}"
         finally:
-            session.close()  # Always close the session
+            session.close()
 
     def remove_channel_member(self, channel_owner, channel_name, username):
         """Remove a member from the specified channel if the channel owner is valid."""
@@ -269,7 +266,7 @@ class Database:
             session.rollback()  # Roll back in case of error
             return False, f"Error occurred during removing user from channel: {str(e)}"
         finally:
-            session.close()  # Always close the session
+            session.close()
 
     def send_message(self, sender_username, channel_name, message_content):
         """Send a message to a specified channel from the given user only if the user is a member of the channel."""
@@ -311,10 +308,7 @@ class Database:
             session.rollback()  # Roll back in case of error
             return False, f"Error occurred while sending the message: {str(e)}"
         finally:
-            session.close()  # Always close the session
-
-
-    # operacja autoryzowana - tylko wlasciciel kanalu bedzie mogl usunac uzytkownikow
+            session.close()
 
     def channel_length(self, channel_owner, channel_name):
         """Return the number of messages in the specified channel."""
@@ -343,9 +337,6 @@ class Database:
         session.close()
         return True, message_count  # Return the count of messages
 
-    # operacja autoryzowana
-    # channel_owner, channel identyfikuje tobie kanal
-    # n - liczba ostatnich wiadomosci na kanale
     def get_channel_messages(self, channel_owner, channel_name, n):
         """Return the last n messages from the specified channel if the channel owner is valid."""
         Session = sessionmaker(bind=self.db_connection())
@@ -377,10 +368,8 @@ class Database:
         except Exception as e:
             return False, f"Error occurred while fetching messages: {str(e)}"
         finally:
-            session.close()  # Always close the session
+            session.close()
 
-    # operacja autoryzowana
-    # channel_owner, channel identyfikuje tobie kanal
     def channel_delta(self, channel_owner, channel_name, timestamp):
         """Return all messages NEWER!!! than the given timestamp from the specified channel if the channel owner is valid."""
         Session = sessionmaker(bind=self.db_connection())
@@ -415,4 +404,4 @@ class Database:
         except Exception as e:
             return False, f"Error occurred while fetching new messages: {str(e)}"
         finally:
-            session.close()  # Always close the session
+            session.close()
