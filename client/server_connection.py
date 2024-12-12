@@ -5,13 +5,25 @@ class ServerConnection:
     def __init__(self):
         """Constructor for ServerConnection."""
         self.url = "ToDelete"
-        self.request_creator = None  # Initially empty, will be set after login
+        self.request_creator = RequestCreator()
 
     def log_in(self, user):
         """Log in the user and set its identity"""
-        self.request_creator = RequestCreator()
         response = self.request_creator.send_log_in_request(user)
-        print(response)
+        if(not response.ok):
+            return False, "Check server connection!"
+
+        response_dict = response.json()
+        return response_dict['success'], response_dict['message']
+
+    def sign_up(self, user):
+        """Sign up the user"""
+        response = self.request_creator.send_sign_up_request(user)
+        if(not response.ok):
+            return False, "Check server connection!"
+
+        response_dict = response.json()
+        return response_dict['success'], response_dict['message']
 
     def get_session_id(self, user):
         """Simulates acquiring session ID for the user (this can be replaced with actual logic)."""

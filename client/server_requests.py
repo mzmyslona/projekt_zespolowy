@@ -3,6 +3,8 @@ import config
 import json
 from user import User
 
+requests.packages.urllib3.disable_warnings()
+
 class RequestSendException(Exception):
     pass
 
@@ -32,7 +34,6 @@ class RequestCreator:
             def wrapper(*args, **kwargs):
                 # Get the dictionary of arguments with authorization field
                 args_dict = func(*args, **kwargs)
-                print(f"Sending request with {http_method} method")
 
                 # Sending data to server using the specified HTTP method
                 url = args_dict.get("url")
@@ -59,6 +60,15 @@ class RequestCreator:
         user_data = { 'username': user.username,
                       'password': user.password }
         args_dict = { 'url': f'{config.SERVER_URL}/login',
+                      'data': user_data }
+        return args_dict
+
+    @send('POST')
+    def send_sign_up_request(self, user):
+        user_data = { 'username': user.username,
+                      'password': user.password,
+                      'email': user.email }
+        args_dict = { 'url': f'{config.SERVER_URL}/signup',
                       'data': user_data }
         return args_dict
 
