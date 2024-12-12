@@ -30,7 +30,7 @@ class Database:
         # If user exists, check the password
         if user and user.haslo:
             if bcrypt.checkpw(password.encode('utf-8'), user.haslo.encode('utf-8')):
-                return True, "Credentials verified"
+                return True, ""
             else:
                 return False, "Invalid password"
         elif user:
@@ -66,7 +66,7 @@ class Database:
         try:
             session.add(new_user)
             session.commit()
-            return (True, "User added successfully!")
+            return (True, "")
         except Exception as e:
             session.rollback()
             return (False, f"Error occurred during user creation: {str(e)}")
@@ -135,7 +135,7 @@ class Database:
             # Add the new channel to the session and commit
             session.add(new_channel)
             session.commit()
-            return True, f"Channel '{channel_name}' created successfully!"
+            return True, ""
         except Exception as e:
             session.rollback()  # Roll back the session in case of error
             return False, f"Error occurred during channel creation: {str(e)}"
@@ -166,7 +166,7 @@ class Database:
             session.delete(channel)
             session.commit()
 
-            return True, f"Channel '{channel_name}' removed successfully!"
+            return True, ""
         except Exception as e:
             session.rollback()  # Roll back in case of error
             return False, f"Error occurred during channel removal: {str(e)}"
@@ -189,7 +189,7 @@ class Database:
             models.Kanaly.nazwa_kanalu == channel_name,
             models.Kanaly.id_wlasciciela == owner.id
         ).first()
-        
+
         if not channel:
             session.close()
             return False, "Channel not found or you are not the owner."
@@ -202,7 +202,7 @@ class Database:
 
         # Check if the specified user already exists in the channel's user list
         current_users = channel.uzytkownicy_kanalu.split(', ') if channel.uzytkownicy_kanalu else []
-        
+
         if username in current_users:
             session.close()
             return False, f"User '{username}' is already a member of the channel."
@@ -210,11 +210,11 @@ class Database:
         # Update the channel_users field
         current_users.append(username)  # Add the new user to the list
         channel.uzytkownicy_kanalu = ', '.join(current_users)  # Update the channel_users representation
-        
+
         try:
             # Commit the changes to the session
             session.commit()
-            return True, f"User '{username}' added to channel '{channel_name}' successfully!"
+            return True, ""
         except Exception as e:
             session.rollback()
             return False, f"Error occurred during adding user to channel: {str(e)}"
@@ -261,7 +261,7 @@ class Database:
         try:
             # Commit the changes to the session
             session.commit()
-            return True, f"User '{username}' removed from channel '{channel_name}' successfully!"
+            return True, ""
         except Exception as e:
             session.rollback()  # Roll back in case of error
             return False, f"Error occurred during removing user from channel: {str(e)}"
@@ -303,7 +303,7 @@ class Database:
             # Add the new message to the session and commit
             session.add(new_message)
             session.commit()
-            return True, f"Message sent to channel '{channel_name}' successfully!"
+            return True, ""
         except Exception as e:
             session.rollback()  # Roll back in case of error
             return False, f"Error occurred while sending the message: {str(e)}"
