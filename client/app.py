@@ -20,7 +20,10 @@ class ChatApp:
         success, message = self.server_connection.log_in(user_to_auth)
 
         if success:
-            self.frontend.type_effect(self.frontend.print_colored("\nSuccessfully logged in.\n", 'green'))
+            if message:
+                self.frontend.type_effect(self.frontend.print_colored(f"\n{message}\n", 'yellow'))
+            else:
+                self.frontend.type_effect(self.frontend.print_colored("\nSuccessfully logged in.\n", 'green'))
         else:
             self.frontend.type_effect(self.frontend.print_colored(f"\n{message}\n", 'red'))
 

@@ -14,6 +14,8 @@ class ServerConnection:
             return False, "Check server connection!"
 
         response_dict = response.json()
+        self.request_creator.set_user_identity(UserIdentity(user, response_dict['session_id']))
+
         return response_dict['success'], response_dict['message']
 
     def sign_up(self, user):
@@ -24,11 +26,6 @@ class ServerConnection:
 
         response_dict = response.json()
         return response_dict['success'], response_dict['message']
-
-    def get_session_id(self, user):
-        """Simulates acquiring session ID for the user (this can be replaced with actual logic)."""
-        # For example, generate a simple session ID (you can replace this with real logic)
-        return f"session_for_{user.username}_1234"
 
     def create_channel(self, channel_name):
         """Create a channel using RequestCreator."""

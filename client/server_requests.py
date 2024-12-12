@@ -45,14 +45,14 @@ class RequestCreator:
                     elif http_method == 'DELETE':
                         response = requests.delete(url, json=args_dict['data'], verify=False)
                     else:
-                        raise RequestSendException("Cannot authorize user. User identity was not set up yet.")
+                        raise RequestSendException("Unknown HTTP request.")
                     return response  # Return the response from the request
                 except BaseException as e:
                     raise RequestSendException(e.message)
             return wrapper
         return decorator
 
-    def set_user_identity(user_identity):
+    def set_user_identity(self, user_identity):
         self.user_identity = user_identity
 
     @send('POST')
